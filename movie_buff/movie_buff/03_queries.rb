@@ -1,13 +1,38 @@
 def what_was_that_one_with(those_actors)
   # Find the movies starring all `those_actors` (an array of actor names).
   # Show each movie's title and id.
-
+  # movies = Movie.includes(:actors)
+  #
+  # those_actors.each do |actor|
+  Movie
+    .select(:id, :title)
+    .joins(:actors)
+    .where('actors.name IN (?)', those_actors)
+    .group(:id)
+    .having('COUNT(actors.id) > ?', those_actors.length-1)
 end
+
+# SELECT COUNT(movies.id) AS no_of_movies FROM movies INNER JOIN castings ON movies.id = castings.movie_id
+# JOIN actors ON castings.actor_id = actors.id
+# WHERE actors.name IN ('Ben Affleck','Matt Damon')
+# GROUP BY movies.id, actors.name HAVING (COUNT(actors.id) > 1)
 
 def golden_age
   # Find the decade with the highest average movie score.
-
+  Movie
+    .select('(yr/10)*10 AS decade')
+    .group('decade')
+    .order('AVG(score) DESC')
+    .first
+    .decade
 end
+
+# SELECT (yr/10)*10 AS decade
+# FROM movies
+# GROUP BY decade
+# HAVING AVG(score) > 0
+# ORDER BY AVG(score) DESC
+# LIMIT 1
 
 def costars(name)
   # List the names of the actors that the named actor has ever
