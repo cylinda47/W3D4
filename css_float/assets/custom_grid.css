@@ -1,0 +1,6 @@
+/* PUT FLUID GRID CODE HERE */
+.cf:after {
+  content: ""; /* Empty content string */
+  display: block; /* Only block elements can clear */
+  clear: both;
+}
